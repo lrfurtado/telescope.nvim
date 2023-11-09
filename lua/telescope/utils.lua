@@ -397,7 +397,7 @@ function utils.display_termcodes(str)
   return str:gsub(string.char(9), "<TAB>"):gsub("", "<C-F>"):gsub(" ", "<Space>")
 end
 
-function utils.get_os_command_output(cmd, cwd)
+function utils.get_os_command_output(cmd, cwd, timeout)
   if type(cmd) ~= "table" then
     utils.notify("get_os_command_output", {
       msg = "cmd has to be a table",
@@ -414,7 +414,7 @@ function utils.get_os_command_output(cmd, cwd)
     on_stderr = function(_, data)
       table.insert(stderr, data)
     end,
-  }):sync()
+  }):sync(timeout)
   return stdout, ret, stderr
 end
 

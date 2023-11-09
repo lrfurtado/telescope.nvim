@@ -16,7 +16,7 @@ local git_command = utils.__git_command
 local git = {}
 
 local get_git_command_output = function(args, opts)
-  return utils.get_os_command_output(git_command(args, opts), opts.cwd)
+  return utils.get_os_command_output(git_command(args, opts), opts.cwd, opts.timeout)
 end
 
 git.files = function(opts)
@@ -367,13 +367,13 @@ git.status = function(opts)
 
   local gen_new_finder = function()
     local expand_dir = vim.F.if_nil(opts.expand_dir, true)
-    local git_cmd = git_command({ "status", "-z", "--", "." }, opts)
+    local git_cmd = { "status", "-z", "--", "." }
 
     if expand_dir then
       table.insert(git_cmd, #git_cmd - 1, "-u")
     end
 
-    local output = utils.get_os_command_output(git_cmd, opts.cwd)
+    local output = get_git_command_output(git_cmd, opts)
 
     if #output == 0 then
       utils.notify("builtin.git_status", {
