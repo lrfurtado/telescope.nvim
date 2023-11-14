@@ -1075,7 +1075,8 @@ internal.marks = function(opts)
   local marks_others = {}
   local bufname = vim.api.nvim_buf_get_name(opts.bufnr)
   local all_marks = {}
-  if opts.mark_type == "all" or opts.mark_type == nil then
+  opts.mark_type = vim.F.if_nil(opts.mark_type, "all")
+  if opts.mark_type == "all" then
     all_marks = { local_marks, global_marks }
   elseif opts.mark_type == "local" then
     all_marks = { local_marks }
